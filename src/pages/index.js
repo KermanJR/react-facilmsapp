@@ -3,6 +3,7 @@ import styles from './style/style.module.css';
 import { BiSearch, BiBarcodeReader } from 'react-icons/bi'
 import Select from 'react-select';
 import { useRef, useEffect } from 'react';
+import Quagga from 'quagga';
 
  export default function MyApp(){
 
@@ -25,32 +26,34 @@ import { useRef, useEffect } from 'react';
         }),
       };
 
-      const handleOpenCamera = async () => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          const imageCapture = new ImageCapture(stream.getVideoTracks()[0]);
-          const photoBlob = await imageCapture.takePhoto();
-        } catch (error) {
-          console.error('Erro ao acessar a câmera:', error);
-        }
+      const videoRef = useRef(null);
+
+      const startBarcodeScanner = () => {
+        Quagga.init(
+          {
+            inputStream: {
+              name: 'Live',
+              type: 'LiveStream',
+              target: videoRef.current,
+            },
+            decoder: {
+              readers: ['ean_reader', 'code_128_reader'], 
+            },
+          },
+          (err) => {
+            if (err) {
+              console.error('Erro ao inicializar Quagga:', err);
+              return;
+            }
+            Quagga.start();
+          }
+        );
+    
+        Quagga.onDetected((data) => {
+          console.log('Código de barras detectado:', data.codeResult.code);
+          Quagga.stop();
+        });
       };
-
-      const handleCameraButtonClick = () => {
-        const inputElement = document.createElement('input');
-        inputElement.type = 'file';
-        inputElement.accept = 'image/*';
-        inputElement.capture = 'camera';
-        inputElement.addEventListener('change', handleFileSelected, false);
-        inputElement.click();
-      };
-
-      const handleFileSelected = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      console.log('Arquivo selecionado:', file);
-    }
-  };
 
       let refSelect = useRef(null);
 
@@ -99,18 +102,25 @@ import { useRef, useEffect } from 'react';
                         padding: '1rem',
                         height: '20px'
                     }}/>
-                    <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={handleCameraButtonClick}><BiBarcodeReader/></Button>
+                    <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={startBarcodeScanner}><BiBarcodeReader/></Button>
                </Box>
                <Box style={{marginTop: '2rem', display: 'flex', flexDirection: 'row', gap
             : '1rem', justifyContent: 'center', width: '100%'}}>
                     <Select  options={options} placeholder="Nome do produto" styles={customStyles} ref={refSelect} className="react-select-container"/>
                     <Button variant='contained' style={{textTransform: 'capitalize'}} ><BiSearch/></Button>
                </Box>
+               <video ref={videoRef} style={{
+                border: '1px solid #ccc',
+                width: '300px',
+                height: '100px',
+                marginTop: '1rem'
+            }}/>
             </Box>
             <Typography typography="p" style={{
                 fontSize:'.6rem',
                 marginTop: '.5rem'
             }}>Copyright © 2023 Fácil Automação Comercial. Todos os direitos reservados.</Typography>
+           
         </Box>
     )
  }
