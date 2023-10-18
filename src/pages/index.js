@@ -3,6 +3,7 @@ import styles from './style/style.module.css';
 import { BiSearch, BiBarcodeReader } from 'react-icons/bi'
 import Select from 'react-select';
 import { useRef, useEffect } from 'react';
+import BarcodeScanner from '../components/QrCode';
  export default function MyApp(){
 
     const options = [
@@ -98,6 +99,7 @@ import { useRef, useEffect } from 'react';
                         padding: '1rem',
                         height: '20px'
                     }}/>
+                      <BarcodeScanner />
                     <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={handleCameraButtonClick}><BiBarcodeReader/></Button>
                </Box>
                <Box style={{marginTop: '2rem', display: 'flex', flexDirection: 'row', gap
