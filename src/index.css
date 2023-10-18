@@ -8,3 +8,22 @@
 body{
   width: 100%;
 }
+
+.react-select-container{
+  width: 353px;
+  font-size: .75rem;
+  text-align: left;
+}
+
+
+.react-select__menu > .react-select__menu-list > .react-select__option{
+  font-size: .875rem;
+} 
+@media screen and (max-width: 876px){
+  .react-select-container{
+    width: 353px;
+  }
+  
+  
+}
+

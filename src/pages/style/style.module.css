@@ -19,8 +19,30 @@
     border: 1px solid #d9d9d9;
 }
 
+
 .logo{
     width: 120px;
     height: 120px;
     object-fit: contain;
+}
+
+.selectRef{}
+
+
+
+@media screen and (max-width: 876px){
+    .form{
+        height: 400px;
+        width: 100%;
+        padding: 2rem;
+    }  
+    .container{
+        padding: 1rem;
+
+    }
+
+    .css-1dk5jgi-control{
+        width: 100%;
+    }
+    
 }

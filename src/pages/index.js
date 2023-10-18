@@ -1,6 +1,6 @@
 import { Box, Input, Button, Typography, Ima} from '@mui/material';
 import styles from './style/style.module.css';
-import { BiSearch } from 'react-icons/bi'
+import { BiSearch, BiBarcodeReader } from 'react-icons/bi'
 import Select from 'react-select';
 import { useRef, useEffect } from 'react';
  export default function MyApp(){
@@ -8,7 +8,7 @@ import { useRef, useEffect } from 'react';
     const options = [
         { value: 'produto1', label: 'Produto 1' },
         { value: 'produto2', label: 'Produto 2' },
-        { value: 'produto3', label: 'Prtoduto 3' }
+        { value: 'produto3', label: 'Produto 3' }
       ]
 
       const customStyles = {
@@ -16,8 +16,6 @@ import { useRef, useEffect } from 'react';
           ...base,
           border: state.isFocused ? '1px solid #ccc' : '1px solid #ccc',
           boxShadow: state.isFocused ? 0 : 0,
-          width: '350px',
-          height: 10,
           borderRadius: '6px',
           backgroundColor: '#ebebeb',
           fontSize: '.8rem',
@@ -62,7 +60,7 @@ import { useRef, useEffect } from 'react';
                     <p style={{fontSize: '.875rem'}}>Realize a sua consulta abaixo:</p>
                 </Box>
 
-               <Box style={{marginTop: '4rem', display: 'flex', flexDirection: 'row', gap
+               <Box style={{marginTop: '3rem', display: 'flex', flexDirection: 'row', gap
             : '1rem', justifyContent: 'center', width: '100%'}}>
                     <input type='text' placeholder='Códido de barras' style={{
                         width: '100%',
@@ -72,18 +70,18 @@ import { useRef, useEffect } from 'react';
                         padding: '1rem',
                         height: '20px'
                     }}/>
-                    <Button variant='contained' style={{textTransform: 'capitalize'}}><BiSearch/></Button>
+                    <Button variant='contained' style={{textTransform: 'capitalize'}}><BiBarcodeReader/></Button>
                </Box>
                <Box style={{marginTop: '2rem', display: 'flex', flexDirection: 'row', gap
             : '1rem', justifyContent: 'center', width: '100%'}}>
-                    <Select  options={options} placeholder="Nome do produto" styles={customStyles} ref={refSelect}/>
+                    <Select  options={options} placeholder="Nome do produto" styles={customStyles} ref={refSelect} className="react-select-container"/>
                     <Button variant='contained' style={{textTransform: 'capitalize'}}><BiSearch/></Button>
                </Box>
             </Box>
             <Typography typography="p" style={{
                 fontSize:'.6rem',
                 marginTop: '.5rem'
-            }}>Copyright © 2023 Fácil Automação Comercial. Direitos reservados.</Typography>
+            }}>Copyright © 2023 Fácil Automação Comercial. Todos os direitos reservados.</Typography>
         </Box>
     )
  }
