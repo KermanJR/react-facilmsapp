@@ -27,22 +27,29 @@ import { useRef, useEffect } from 'react';
       const handleOpenCamera = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    
-          // Agora você tem acesso à câmera, mas não está exibindo a saída de vídeo.
-    
-          // Você pode fazer o que desejar com a câmera, como tirar fotos ou acessar as configurações da câmera.
-          // Por exemplo, você pode usar a API ImageCapture para tirar fotos:
           const imageCapture = new ImageCapture(stream.getVideoTracks()[0]);
-    
-          // Capture uma foto
           const photoBlob = await imageCapture.takePhoto();
-    
-          // Agora você pode fazer algo com a foto, como exibi-la ou enviá-la para um servidor.
-    
         } catch (error) {
           console.error('Erro ao acessar a câmera:', error);
         }
       };
+
+      const handleCameraButtonClick = () => {
+        const inputElement = document.createElement('input');
+        inputElement.type = 'file';
+        inputElement.accept = 'image/*';
+        inputElement.capture = 'camera';
+        inputElement.addEventListener('change', handleFileSelected, false);
+        inputElement.click();
+      };
+
+      const handleFileSelected = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      console.log('Arquivo selecionado:', file);
+    }
+  };
 
       let refSelect = useRef(null);
 
@@ -91,7 +98,7 @@ import { useRef, useEffect } from 'react';
                         padding: '1rem',
                         height: '20px'
                     }}/>
-                    <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={handleOpenCamera}><BiBarcodeReader/></Button>
+                    <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={handleCameraButtonClick}><BiBarcodeReader/></Button>
                </Box>
                <Box style={{marginTop: '2rem', display: 'flex', flexDirection: 'row', gap
             : '1rem', justifyContent: 'center', width: '100%'}}>
