@@ -26,19 +26,17 @@
     object-fit: contain;
 }
 
-.selectRef{}
 
 
 
 @media screen and (max-width: 876px){
     .form{
-        height: 400px;
+        height: 550px;
         width: 100%;
-        padding: 2rem;
+        padding: 1rem;
     }  
     .container{
         padding: 1rem;
-
     }
 
     .css-1dk5jgi-control{
