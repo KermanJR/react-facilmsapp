@@ -23,6 +23,18 @@ import { useRef, useEffect } from 'react';
         }),
       };
 
+     const  handleOpenCamera = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          const videoElement = document.createElement('video');
+          videoElement.srcObject = stream;
+          videoElement.autoplay = true;
+          document.body.appendChild(videoElement);
+        } catch (error) {
+          console.error('Erro ao acessar a câmera:', error);
+        }
+      };
+
       let refSelect = useRef(null);
 
       const handleF12KeyPress = (e) => {
@@ -75,7 +87,7 @@ import { useRef, useEffect } from 'react';
                <Box style={{marginTop: '2rem', display: 'flex', flexDirection: 'row', gap
             : '1rem', justifyContent: 'center', width: '100%'}}>
                     <Select  options={options} placeholder="Nome do produto" styles={customStyles} ref={refSelect} className="react-select-container"/>
-                    <Button variant='contained' style={{textTransform: 'capitalize'}}><BiSearch/></Button>
+                    <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={handleOpenCamera}><BiSearch/></Button>
                </Box>
             </Box>
             <Typography typography="p" style={{
