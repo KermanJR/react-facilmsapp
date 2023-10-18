@@ -8,7 +8,8 @@ import { useRef, useEffect } from 'react';
     const options = [
         { value: 'produto1', label: 'Produto 1' },
         { value: 'produto2', label: 'Produto 2' },
-        { value: 'produto3', label: 'Produto 3' }
+        { value: 'produto3', label: 'Produto 3' },
+        { value: 'produto4', label: 'Refrigerante Coca-Cola Pet 2L' }
       ]
 
       const customStyles = {
@@ -23,13 +24,21 @@ import { useRef, useEffect } from 'react';
         }),
       };
 
-     const  handleOpenCamera = async () => {
+      const handleOpenCamera = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          const videoElement = document.createElement('video');
-          videoElement.srcObject = stream;
-          videoElement.autoplay = true;
-          document.body.appendChild(videoElement);
+    
+          // Agora você tem acesso à câmera, mas não está exibindo a saída de vídeo.
+    
+          // Você pode fazer o que desejar com a câmera, como tirar fotos ou acessar as configurações da câmera.
+          // Por exemplo, você pode usar a API ImageCapture para tirar fotos:
+          const imageCapture = new ImageCapture(stream.getVideoTracks()[0]);
+    
+          // Capture uma foto
+          const photoBlob = await imageCapture.takePhoto();
+    
+          // Agora você pode fazer algo com a foto, como exibi-la ou enviá-la para um servidor.
+    
         } catch (error) {
           console.error('Erro ao acessar a câmera:', error);
         }
@@ -74,7 +83,7 @@ import { useRef, useEffect } from 'react';
 
                <Box style={{marginTop: '3rem', display: 'flex', flexDirection: 'row', gap
             : '1rem', justifyContent: 'center', width: '100%'}}>
-                    <input type='text' placeholder='Códido de barras' style={{
+                    <input type='text' placeholder='Código de barras' style={{
                         width: '100%',
                         backgroundColor: '#ebebeb',
                         borderRadius: '6px',
@@ -82,12 +91,12 @@ import { useRef, useEffect } from 'react';
                         padding: '1rem',
                         height: '20px'
                     }}/>
-                    <Button variant='contained' style={{textTransform: 'capitalize'}}><BiBarcodeReader/></Button>
+                    <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={handleOpenCamera}><BiBarcodeReader/></Button>
                </Box>
                <Box style={{marginTop: '2rem', display: 'flex', flexDirection: 'row', gap
             : '1rem', justifyContent: 'center', width: '100%'}}>
                     <Select  options={options} placeholder="Nome do produto" styles={customStyles} ref={refSelect} className="react-select-container"/>
-                    <Button variant='contained' style={{textTransform: 'capitalize'}} onClick={handleOpenCamera}><BiSearch/></Button>
+                    <Button variant='contained' style={{textTransform: 'capitalize'}} ><BiSearch/></Button>
                </Box>
             </Box>
             <Typography typography="p" style={{
