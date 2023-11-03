@@ -19,39 +19,46 @@ import {
 } from '@mui/material';
 import styles from './style/style.module.css';
 import { BiSearch, BiBarcodeReader } from 'react-icons/bi'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import GansoService from '../api/API';
 
 
-
  export default function MyApp(){
+ 
 
     const [data, setData] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [inputValue, setInputValue] = useState('');
-    const [modalSearchValue, setModalSearchValue] = useState(''); 
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-   const [activef2, setActiveF2] = useState(false);
+    const [activef2, setActiveF2] = useState(false);
 
-   
+
+    const inputRef = useRef(null);
 
     const openResultModal = () => {
       setOpenModal(true);
     }
   
+  
     const closeResultModal = () => {
       setOpenModal(false);
       setActiveF2(false)
-
-    }
+      setInputValue(''); 
+      setTimeout(() => {
+        console.log(inputRef)
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select();
+        }
+      }, 100); 
+    };
 
  
     const handleInputChange = (event) => {
       const { value } = event.target;
       setIsLoading(true)
       setInputValue(value);
-      //setData([])
       setIsLoading(false)
       let filteredProducts = applyFilter(value);
 
@@ -62,10 +69,11 @@ import GansoService from '../api/API';
       }
     };
 
+  
+
     const applyFilter = (value) => {
  
       const lowerSearchValue = value.toLowerCase();
-      //setData(filteredProducts);
       return data.filter((product) => {
         return (
           product.CODIGO.toString().includes(lowerSearchValue) ||
@@ -76,13 +84,20 @@ import GansoService from '../api/API';
             product.PRECO_VENDA.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }).includes(lowerSearchValue))
         );
       });
-    
-      
     };
+
+    
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.focus(); 
+        inputRef.current.select(); 
+      }
+    }, [openModal]);
+
 
     useEffect(() => {
       const handleKeyPress = (event) => {
-        console.log(event)
+    
         if (event.keyCode === 113) {
           openResultModal();
           setInputValue('')
@@ -97,9 +112,22 @@ import GansoService from '../api/API';
         window.removeEventListener('keydown', handleKeyPress);
       };
     }, []);
+
+    useEffect(() => {
+      const handleKeyPress = (event) => {
+        if (event.key === 'Escape' || event.key === 'Esc') {
+          closeResultModal();
+        }
+      };
   
+      window.addEventListener('keydown', handleKeyPress);
+  
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      };
+    }, []);
 
-
+  
     function GetProductById(e){
       if(inputValue != null && inputValue != ''){
         e.preventDefault();
@@ -153,6 +181,9 @@ import GansoService from '../api/API';
       }
     };
 
+
+
+
     
       useEffect(() => {
         const clearMessages = () => {
@@ -167,6 +198,8 @@ import GansoService from '../api/API';
 
     
     return(
+
+      <Box>
         <Box className={styles.container}>
             <Dialog open={openModal} onClose={closeResultModal} maxWidth="lg" fullWidth>
         <DialogTitle style={{ color: '#F26422' }}>Consulta</DialogTitle>
@@ -179,8 +212,7 @@ import GansoService from '../api/API';
               <Box style={{display: 'flex', flexDirection: 'row', gap: '.5rem', alignItems: 'center', justifyContent: 'center'}}>
                 <TextField
                   label="Pesquisar"
-                  focused={true}
-                  InputProps={{ selectAllOnFocus: true }}
+                 
                   style={{
                     marginTop: '.5rem',
                     width: activef2? '90%': '100%',
@@ -188,7 +220,10 @@ import GansoService from '../api/API';
                   variant="outlined"
                   onKeyPress={handleKeyPress}
                   autoFocus={true}
+                  InputProps={{ selectAllOnFocus: true }}
                   onChange={(e) => handleInputChange(e)}
+                  focused={true}
+      
                 />
                   <Box>
                     {
@@ -287,6 +322,7 @@ import GansoService from '../api/API';
                 }}
                 focused={true}
           
+          
               />
                <Button onClick={GetProductById} variant='contained' style={{
                 height: '55px',
@@ -294,6 +330,14 @@ import GansoService from '../api/API';
                 marginLeft: '1rem'
 
                }}><BiBarcodeReader size={20}/></Button>
+               <p color="red" style={{
+                  textAlign: 'left',
+                  fontSize: '.7rem',
+                  color: 'black',
+                  width: '85%',
+                  margin: '.7rem auto',
+                  height: '20px'
+                }}>F2 - Pesquisar</p>
                 <p color="red" style={{
                   textAlign: 'left',
                   fontSize: '.7rem',
@@ -302,8 +346,11 @@ import GansoService from '../api/API';
                   margin: '.7rem auto',
                   height: '20px'
                 }}>{error}</p>
+                
             </Box>
+            
             </Box>
+            
           </Box>
         </Box>
 
@@ -319,6 +366,7 @@ import GansoService from '../api/API';
         >
           Copyright © 2023 Fácil Automação Comercial. Todos os direitos reservados.
         </Typography>
+      </Box>
       </Box>
     )
  }

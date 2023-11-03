@@ -22,7 +22,7 @@ export default class GansoService {
     
         return response.data;
       } catch (error) {
-        console.error('Erro ao buscar produtos', error);
+        console.error('Erro ao buscar todos produtos: ', error);
         throw error;
       }
   }
